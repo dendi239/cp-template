@@ -1,0 +1,6 @@
+[submodule "3rdparty/ac-library"]
+	path = 3rdparty/ac-library
+	url = git@github.com:atcoder/ac-library
+[submodule "3rdparty/bazel-compile-commands-extractor"]
+	path = 3rdparty/bazel-compile-commands-extractor
+	url = git@github.com:hedronvision/bazel-compile-commands-extractor.git
