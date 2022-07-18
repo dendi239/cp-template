@@ -2,12 +2,10 @@
 
 import pathlib
 import typing as tp
-from enum import Enum
-from importlib.resources import path
 
 import click
 import json5
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 def to_camel(string: str) -> str:
