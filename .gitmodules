@@ -4,3 +4,6 @@
 [submodule "3rdparty/bazel-compile-commands-extractor"]
 	path = 3rdparty/bazel-compile-commands-extractor
 	url = git@github.com:hedronvision/bazel-compile-commands-extractor.git
+[submodule "3rdparty/rules_python"]
+	path = 3rdparty/rules_python
+	url = git@github.com:bazelbuild/rules_python.git
