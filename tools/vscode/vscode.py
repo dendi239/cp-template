@@ -1,9 +1,6 @@
-#! /usr/bin/env python3
-
 import pathlib
 import typing as tp
 
-import click
 import json5
 from pydantic import BaseModel
 
@@ -42,14 +39,13 @@ class TasksConfig(BaseModel):
 
 class Configuration(BaseModel):
     name: str
-    type: str = "cppdbg"
+    type: str = "lldb"
     preLaunchTask: str
     request: str = "launch"
     program: str
     cwd: str = "${workspaceFolder}"
-    MIMode: str = "lldb"
-    externalConsole: bool = True
-    sourceFileMap: tp.Dict[str, str] = {}
+    console: str = "externalTerminal"
+    sourceMap: tp.Dict[str, str] = {}
 
 
 def build_configuration(bazel_target: str, build_task_name: str) -> Configuration:
@@ -57,8 +53,8 @@ def build_configuration(bazel_target: str, build_task_name: str) -> Configuratio
     return Configuration(
         name=bazel_target,
         preLaunchTask=build_task_name,
-        program=f"${{workspaceFolder}}/bazel-out/darwin-dbg/bin/{bazel_target.replace(':', '/')}",
-        sourceFileMap={
+        program=f"${{workspaceFolder}}/bazel-bin/{bazel_target.replace(':', '/')}",
+        sourceMap={
             prefix: f"${{workspaceFolder}}/{prefix}",
         },
     )
@@ -86,16 +82,7 @@ def try_parse(cls: tp.Type[BaseModel], path: pathlib.Path) -> tp.Optional[BaseMo
         return cls()
 
 
-@click.group()
-@click.option("--debug/--no-debug", default=False)
-def cli(debug):
-    pass
-
-
-@cli.command()  # @cli, not @click!
-@click.argument("bazel_target")
-@click.option("--config-dir", type=pathlib.Path, default=pathlib.Path(".vscode"))
-def add_debug(bazel_target, config_dir):
+def add_debug(bazel_target: str, config_dir: pathlib.Path) -> None:
     bazel_target = bazel_target.strip("/")
 
     tasks_config = try_parse(TasksConfig, config_dir / "tasks.json")
@@ -105,7 +92,7 @@ def add_debug(bazel_target, config_dir):
         label=f"build {bazel_target}",
         command=f"bazel build --compilation_mode=dbg --spawn_strategy=standalone {bazel_target}",
     )
-    tasks_config.add_taks(task)
+    tasks_config.add_task(task)
     launch_config.add_configuration(build_configuration(bazel_target, task.label))
 
     config_dir.mkdir(exist_ok=True)
@@ -113,21 +100,3 @@ def add_debug(bazel_target, config_dir):
         f.write(tasks_config.json(indent=2))
     with open(config_dir / "launch.json", "w") as f:
         f.write(launch_config.json(indent=2))
-
-
-@cli.command()
-@click.argument("config_file", type=str)
-def parse_tasks(config_file):
-    tasks_config = TasksConfig.parse_file(config_file)
-    click.echo(tasks_config.json(indent=2))
-
-
-@cli.command()
-@click.argument("config_file", type=str)
-def parse_launch(config_file):
-    launch_config = LaunchConfig.parse_file(config_file)
-    click.echo(launch_config.json(indent=2))
-
-
-if __name__ == "__main__":
-    cli(obj={})

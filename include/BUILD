@@ -5,9 +5,3 @@ cc_library(
     hdrs = ["bits/stdc++.h"],
     strip_include_prefix = "",
 )
-
-cc_library(
-    name = "debug",
-    hdrs = ["debug.h"],
-    strip_include_prefix = "",
-)

@@ -1,5 +1,4 @@
 """Basic wrapper for ac-library.
-
 ac-library supplied as a header only library, so we supply it.
 It also supplies expander.py for expanding solutions, however, we don't yet use it.
 """
