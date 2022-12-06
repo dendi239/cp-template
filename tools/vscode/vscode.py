@@ -70,6 +70,7 @@ class LaunchConfig(BaseModel):
                 self.configurations[i] = configuration
                 return
         self.configurations.append(configuration)
+        self.configurations.sort(key=lambda x: x.name)
 
     class Config:
         json_loads = json5.loads
