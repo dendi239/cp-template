@@ -1,5 +1,8 @@
 cc_binary(
     name = "{name}",
-    srcs = ["{name}.cpp"],
-    deps = ["//include:stdlib"],
+    srcs = ["{name}.cpp"] + glob(["*.hpp"]),
+    deps = [
+        "//include:stdlib",
+        "//include/dendi239",
+    ],
 )
