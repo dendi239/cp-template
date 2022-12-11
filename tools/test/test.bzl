@@ -1,31 +1,54 @@
-#"""Defines test rule for competive programming.
-#"""
-#
-#TestInfo = provider(
-#    doc = "Creates test case.",
-#    fields = {
-#        "input": "Input data.",
-#        "output": "Output data.",
-#    },
-#)
-#
-#def _cp_test_impl(ctx):
-#    prog = ctx.attr.prog.files_to_run.executable
-#    ctx.actions.run(executable = ctx.executable.prog, arguments = [prog.path], outputs = [ctx.outputs.out])
-#
-#    return DefaultInfo(
-#        executable = simple_checker,
-#    )
-#
-#cp_test = rule(
-#    implementation = _cp_test_impl,
-#    test = True,
-#    attrs = {
-#        "prog": attr.label(executable = True, cfg = "exec"),
-#        "checker": attr.label(),
-#        "tests": attr.label_list(providers=[TestInfo]),
-#    },
-#    outputs = {
-#        "out": "%{name}.out",
-#    },
-#)
+"""rule for testing competitive programming solutions.
+"""
+
+def _single_test(ctx, runner, executable, checker, files):
+    checker_content = """./{runner} {executable} {checker} {tests}
+"""
+    runfiles = ctx.runfiles(files = files)
+    runfiles = runfiles.merge(runner.default_runfiles)
+    runfiles = runfiles.merge(executable.default_runfiles)
+    runfiles = runfiles.merge(checker.default_runfiles)
+ 
+    run_me = ctx.actions.declare_file(ctx.label.name)
+    ctx.actions.write(
+        output = run_me,
+        content = checker_content.format(
+            runner = runner.files_to_run.executable.short_path,
+            executable = executable.files_to_run.executable.short_path,
+            checker = checker.files_to_run.executable.short_path,
+            tests = " ".join([file.path for file in files]),
+        ),
+    )
+
+    return DefaultInfo(
+        executable = run_me,
+        runfiles = runfiles,
+    )
+
+
+def _cp_single_test_impl(ctx):
+    return [
+        _single_test(
+            ctx = ctx,
+            runner = ctx.attr._runner,
+            executable = ctx.attr.target,
+            checker = ctx.attr.checker,
+            files = [
+                file 
+                for file_list in ctx.attr.files
+                for file in file_list.files.to_list()
+            ],
+        ),
+    ]
+
+cp_test = rule(
+    test = True,
+    implementation = _cp_single_test_impl,
+    attrs = {
+        "username": attr.string(),
+        "target": attr.label(executable = True, cfg = "exec"),
+        "checker": attr.label(executable = True, cfg = "exec", default = "//tools/test:checker"),
+        "files": attr.label_list(allow_files = True),
+        "_runner": attr.label(executable = True, cfg = "exec", default = "//tools/test:run-tests"),
+    },
+)

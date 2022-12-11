@@ -1,3 +1,5 @@
+load("//tools/test:test.bzl", "cp_test")
+
 cc_binary(
     name = "{name}",
     srcs = ["{name}.cpp"] + glob(["*.hpp"]),
@@ -5,4 +7,10 @@ cc_binary(
         "//include:stdlib",
         "//include/dendi239",
     ],
+)
+
+cp_test(
+    name = "{name}-test",
+    files = glob(["*.txt"]),
+    target = ":{name}",
 )
