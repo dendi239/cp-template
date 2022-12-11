@@ -34,7 +34,7 @@ struct STree {
     int Value() const { return value * 1ll * mult % mod; }
   };
 
-  int n;
+  int n_;
   vector<Node> values;
 
   void Push(int i, int il, int ir) {
@@ -61,7 +61,7 @@ struct STree {
                build(i + 2 * (im - il), im, ir));
   }
 
-  STree(int n) : n(n), values(2 * n - 1) { build(0, 0, n); }
+  STree(int n) : n_(n), values(2 * n - 1) { build(0, 0, n); }
 
   struct Multiplier {
     STree *tree;
@@ -86,7 +86,7 @@ struct STree {
 
   void Mult(int l, int r, int multiplier) {
     D cerr << "Mult:: " << l << ".." << r << " " << multiplier << endl;
-    Multiplier{this, l, r, multiplier}.Mult(0, 0, n);
+    Multiplier{this, l, r, multiplier}.Mult(0, 0, n_);
   }
 
   struct Query {
@@ -111,7 +111,7 @@ struct STree {
 
   int Sum(int l, int r) {
     Query q{this, l, r, 0};
-    q.query(0, 0, n);
+    q.query(0, 0, n_);
     D cerr << "Query:: " << l << ".." << r << " is " << q.result << endl;
     return q.result;
   }
