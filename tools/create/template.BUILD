@@ -5,7 +5,6 @@ cc_binary(
     srcs = ["{name}.cpp"] + glob(["*.hpp"]),
     deps = [
         "//include:stdlib",
-        "//include/dendi239",
     ],
 )
 
