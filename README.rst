@@ -1,8 +1,10 @@
 Competitive Programming
 -----------------------
 
-This repository will have competitive programming solutions and tools I'm using for.
-Chosen build system is Bazel, editor — vs code.
+Here're available a few useful tools, come take a look.
+All of them intended to be useful for developing (mostly) cpp-based sources for competitive programming.
+The editor of choice is vscode, build system is Bazel.
+Here you can find tools I'm willing to share for everyone to be useful and those can be dropped in without necessity to dealing with stuff like my own library.
 
 Setup
 =====
@@ -14,13 +16,8 @@ This project uses its dependencies as git submodules, so you'll likely need to r
 	git submodule update --init --recursive
 
 
-Here're available a few useful tools, come take a look.
-All of them intended to be useful for developing (mostly) cpp-based sources for competitive programming.
-The editor of choice is vscode, build system is Bazel.
-Here you can find tools I'm willing to share for everyone to be useful and those can be dropped in without necessity to dealing with stuff like my own library.
-
 create source
-_____________
+=============
 
 Creates directory for given problem.
 Accepts full path to target directory, will create all parent once, however you must ensure that target directory does not exist.
@@ -33,7 +30,7 @@ You can configure templates of those in ``tools/create/template*``.
 	bazel run //tools/create -- $(pwd)/path/to/source
 
 tests
-_____
+=====
 
 If you want to opt-in to automatic testing, feel free to use ``//tools/test``, it already set up by ``//tools/create``.
 You can tweak checker and interactor there if you wish.
@@ -49,7 +46,7 @@ Tests considered to be pairs of files of form ``inK.txt`` and ``ansK.txt``.
 	bazel test :...
 
 expand source
-_____________
+=============
 
 If you choose to reuse some existing code, you can find useful to put those in ``include/`` directory and use ``expander``.
 You can pass multiple include directories, it will accept them as ``gcc`` does, convention mentioned earlier proven to be convenient. 
@@ -59,7 +56,7 @@ You can pass multiple include directories, it will accept them as ``gcc`` does, 
 	bazel run //tools/expander -- -I=$(bazel info workspace)/include $(pwd)/your-source.cpp
 
 vscode support
-______________
+==============
 
 There're plenty of tools to work with vscode configuration, take a look:
 
