@@ -59,7 +59,7 @@ class TestRun:
             )
         )
 
-    def print_failure(self, f: tp.SupportsWrite) -> None:
+    def print_failure(self, f) -> None:
         pass
 
 
