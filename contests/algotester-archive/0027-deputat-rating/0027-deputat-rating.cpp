@@ -4,14 +4,14 @@ using namespace std;
 
 using G = vector<vector<pair<int, int64_t>>>;
 
-struct Dfs {
+struct DFS {
   const int n;
   const G &g;
 
   vector<int64_t> on_discovery;
   vector<int64_t> cycles;
 
-  Dfs(const G &g) : n(g.size()), g(g), on_discovery(n, -1) {
+  DFS(const G &g) : n(g.size()), g(g), on_discovery(n, -1) {
   }
 
   void visit(int u) {
@@ -63,7 +63,7 @@ int main() {
     g[v].emplace_back(u, c);
   }
 
-  Dfs dfs(g);
+  DFS dfs(g);
   dfs.fill(s);
 
   auto basis = build_basis(dfs.cycles);

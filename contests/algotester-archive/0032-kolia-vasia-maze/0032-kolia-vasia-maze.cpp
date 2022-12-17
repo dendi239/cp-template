@@ -8,13 +8,13 @@ using G = vector<vector<int>>;
 
 enum Color { NEW, USING, USED };
 
-struct Dfs {
+struct DFS {
   const G &g;
 
   vector<Color> used;
   vector<int> cycle;
 
-  Dfs(const G &g) : g(g), used(g.size(), NEW) {}
+  DFS(const G &g) : g(g), used(g.size(), NEW) {}
 
   int dfs(int u, int p) {
     used[u] = USING;
@@ -62,7 +62,7 @@ int main() {
     g[v].push_back(u);
   }
 
-  Dfs dfs(g);
+  DFS dfs(g);
   dfs.dfs(0, -2);
 
   sort(dfs.cycle.begin(), dfs.cycle.end());

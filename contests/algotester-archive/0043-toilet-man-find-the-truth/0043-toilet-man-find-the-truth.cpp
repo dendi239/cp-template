@@ -1,4 +1,5 @@
 #include "bits/stdc++.h"
+
 #ifdef __APPLE__
 #define D for (bool _flag = true; _flag; _flag = false)
 #else
@@ -13,12 +14,12 @@ struct DoNothing {
   void operator()(int u) const {}
 };
 
-struct Dfs {
+struct DFS {
   const G &g;
   vector<int> tin, tout;
   int now = 0;
 
-  Dfs(const G &g) : g(g), tin(g.size(), -1), tout(g.size(), -1) {}
+  DFS(const G &g) : g(g), tin(g.size(), -1), tout(g.size(), -1) {}
 
   bool visited(int u) const { return tin[u] != -1; }
 
@@ -61,7 +62,7 @@ G Reverse(const G &g) {
 
 pair<G, vector<int>> BuildCondensation(const G &g) {
   const int n = g.size();
-  Dfs dfs(g);
+  DFS dfs(g);
 
   for (int u = 0; u < n; ++u) {
     if (!dfs.visited(u)) {
@@ -81,7 +82,7 @@ pair<G, vector<int>> BuildCondensation(const G &g) {
   }
 
   G rg = Reverse(g);
-  Dfs rfs(rg);
+  DFS rfs(rg);
   for (auto u : exit_order) {
     if (!rfs.visited(u)) {
       rfs.visit(u, [&](int v) { colors[v] = last_color; });
@@ -143,7 +144,7 @@ int main() {
   }
 
   auto icond = find(rcond.begin(), rcond.end(), vector<int>{}) - rcond.begin();
-  auto dfs = Dfs(cond);
+  auto dfs = DFS(cond);
 
   dfs.visit(icond);
   for (int u = 0; u < cond.size(); ++u) {
