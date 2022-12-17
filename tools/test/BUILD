@@ -1,4 +1,4 @@
-load("//tools/test:test.bzl", "cp_test")
+load("@local_tools_deps//:requirements.bzl", "requirement")
 
 py_binary(
     name = "a-plus-b",
@@ -16,12 +16,16 @@ py_binary(
 py_binary(
     name = "run-tests",
     srcs = ["run-tests.py"],
+    deps = [
+        requirement("psutil"),
+    ],
     main = "run-tests.py",
     visibility = ["//visibility:public"],
 )
 
-cp_test(
-    name = "a-plus-b-test",
-    target = ":a-plus-b",
-    files = glob(["*.txt"]),
+py_binary(
+    name = "cat",
+    srcs = ["cat.py"],
+    main = "cat.py",
+    visibility = ["//visibility:public"],
 )
