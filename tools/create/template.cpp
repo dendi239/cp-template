@@ -1,3 +1,8 @@
+/*
+  Author: Me
+  Time: {date} {time}
+*/
+
 #include "bits/stdc++.h"
 
 #ifdef DENDI239

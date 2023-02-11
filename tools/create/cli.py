@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import argparse
+import datetime
 import pathlib
 import shutil
 import typing as tp
@@ -16,7 +16,7 @@ CPP_TEMPLATE_PATH = pathlib.Path(__file__).parent / "template.cpp"
 
 def split_target(full_path: pathlib.Path) -> tp.Tuple[pathlib.Path, str]:
     path = full_path
-    while not (path / 'WORKSPACE').exists():
+    while not (path / "WORKSPACE").exists():
         path = path.parent
         if path.parent == path:
             raise
@@ -41,6 +41,14 @@ def create(name: str, debug: bool) -> None:
     build_path = full_path / "BUILD"
     source_path = full_path / f"{name}.cpp"
 
+    with open(CPP_TEMPLATE_PATH, "r") as source_template_f:
+        source_template = source_template_f.read()
+        now = datetime.datetime.now()
+        source_path.write_text(source_template.format(
+            date=now.strftime("%Y-%m-%d"),
+            time=now.strftime("%H:%M:%S"),
+        ))
+
     shutil.copy(CPP_TEMPLATE_PATH, source_path)
     with open(BUILD_TEMPLATE_PATH, "r") as build_f:
         build_template = build_f.read()
@@ -48,7 +56,7 @@ def create(name: str, debug: bool) -> None:
 
     if debug:
         root, target = split_target(full_path)
-        vscode.add_debug(str(target), root / '.vscode')
+        vscode.add_debug(str(target), root / ".vscode")
 
 
 if __name__ == "__main__":
