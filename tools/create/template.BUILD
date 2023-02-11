@@ -1,3 +1,4 @@
+load("//tools/expand:expand.bzl", "cp_expand")
 load("//tools/test:test.bzl", "cp_test")
 
 cc_binary(
@@ -8,8 +9,13 @@ cc_binary(
     ],
 )
 
+cp_expand(
+    name = "expand",
+    source = "{name}.cpp",
+)
+
 cp_test(
-    name = "{name}-test",
+    name = "test",
     files = glob(["*.txt"]),
     target = ":{name}",
 )

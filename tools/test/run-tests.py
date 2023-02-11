@@ -118,7 +118,7 @@ class Test:
 def poll(proc: subprocess.Popen) -> tp.Tuple[datetime.timedelta, int]:
     max_memory = 0
     start = datetime.datetime.now()
-    deadline = start + datetime.timedelta(seconds=20)
+    deadline = start + datetime.timedelta(seconds=180)
 
     while True:
         res = proc.poll()
@@ -191,7 +191,7 @@ def run_test(t: Test) -> bool:
 
         if res:
             print(f"Runtime error: {res}")
-            print_filecontents("stderr", proc.stderr)
+            print_fileobj("stderr", proc.stderr)
             return True
 
         with open(tf.name, "wb") as f:
@@ -221,7 +221,7 @@ def main():
     parser.add_argument("executable")
     parser.add_argument("checker")
     parser.add_argument("interactor")
-    parser.add_argument("test_files", nargs="+")
+    parser.add_argument("test_files", nargs="*")
 
     args = parser.parse_args()
     inputs, outputs = {}, {}

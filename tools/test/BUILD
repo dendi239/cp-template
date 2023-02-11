@@ -1,12 +1,6 @@
 load("@local_tools_deps//:requirements.bzl", "requirement")
 
 py_binary(
-    name = "a-plus-b",
-    srcs = ["a-plus-b.py"],
-    main = "a-plus-b.py",
-)
-
-py_binary(
     name = "checker",
     srcs = ["checker.py"],
     main = "checker.py",

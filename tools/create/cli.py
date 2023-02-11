@@ -42,14 +42,14 @@ def create(name: str, debug: bool) -> None:
     source_path = full_path / f"{name}.cpp"
 
     with open(CPP_TEMPLATE_PATH, "r") as source_template_f:
-        source_template = source_template_f.read()
-        now = datetime.datetime.now()
-        source_path.write_text(source_template.format(
-            date=now.strftime("%Y-%m-%d"),
-            time=now.strftime("%H:%M:%S"),
-        ))
+        with open(source_path, "w") as source_f:
+            for source_line in source_template_f:
+                now = datetime.datetime.now()
+                source_f.write(source_line
+                    .replace("{date}", now.strftime("%Y-%m-%d"))
+                    .replace("{time}", now.strftime("%H:%M:%S"))
+                )
 
-    shutil.copy(CPP_TEMPLATE_PATH, source_path)
     with open(BUILD_TEMPLATE_PATH, "r") as build_f:
         build_template = build_f.read()
         build_path.write_text(build_template.format(name=name))
